@@ -2,56 +2,60 @@
 
 
 
-function get_date(){
-	
-	$ret = "<select name=\"category\">\n";
-	
+function get_date($day){
+
+	$ret = "<select name=\"day\">\n";
+
 	for($i = 2; $i >= 0; $i--){
 		$mn1 = date("Y/m", strtotime("-${i} month"));
 		$mn2 = date("Ym", strtotime("-${i} month"))."01";
-		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
+		$chk = ($mn2 == $day) ? " selected" : "";
+
+		$ret .= "<option value=\"".$mn2."\"".$chk.">".ht($mn1)."</option>\n";
 	}
 
 	for($i = 1; $i < 2; $i++){
 		$mn1 = date("Y/m", strtotime("+${i} month"));
 		$mn2 = date("Ym", strtotime("+${i} month"))."01";
-		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
+		$chk = ($mn2 == $day) ? " selected" : "";
+
+		$ret .= "<option value=\"".$mn2."\"".$chk.">".ht($mn1)."</option>\n";
 	}
 
 
 	$ret .= "</select>\n";
 	return $ret;
-	
-	
+
+
 }
 
 function get_category($db){
-	
+
 	global $text_titles;
-	
+
 	$mn1 = date("Ym");
 
-	$sql1 = "select seq, title from kk_category order by sort_num";
+	$sql1 = "select seq, title from kk_category where type <> 2 order by sort_num";
 	$db->prepare($sql1);
 	//$db->bind($mn1);
 	$val = $db->execute();
-	
+
 	$ret = "<select name=\"category\">\n";
-	
+
 	foreach($val as $v){
-		
+
 		/*
 		print "---";
 		var_dump($v);
 		print "---";
 		*/
-		
+
 		$ret .= "<option value=\"".$v["seq"]."\">".ht($v["title"])."</option>\n";
-		
-		
+
+
 		/*
 		$v = trim($v);
-		
+
 		if($v == ""){
 			continue;
 		}
@@ -59,57 +63,16 @@ function get_category($db){
 		$cnt++;
 		*/
 	}
-	
+
 	$ret .= "</select>";
 	//$ret .= "<li><span>ëºÅA".ht($text_titles["bhour_regular"])."\n";
 
 	return $ret;
 }
 
-function make_news($db){
-
-	$sql1 = "select id,title from news 
-where delete_flg = '0' and open_flg = '1' and start_date <= sysdate() and end_date > sysdate()
-order by start_date desc
-limit 3";
-
-	$db->prepare($sql1);
-
-	$arr = $db->execute();
-	$ret = "";
-	foreach($arr as $ar){
-		
-		$ret .= sprintf("<li><span><a href=\"news.php?i=%s\">%s</a></span></li>\n",
-									$ar["id"],
-									g_title(ht($ar["title"])));
-	}
-
-	return $ret;
-}
-
-function make_pr($db){
-
-	$sql1 = "select id,name,movie_path,date_format(term, '%YîN%måé%dì˙') as term from practice 
-where delete_flg = '0'
-order by create_date desc
-limit 2";
-
-	$db->prepare($sql1);
-
-	$arr = $db->execute();
-	$ret = "";
-	foreach($arr as $ar){
-
-		$ret .= sprintf("<li><a href=\"s_pr.php?i=%s\">%s ól</a>&nbsp;&nbsp;<p class=\"small2\">(%sÇÃó˚èKïóåi)</p></li>\n",
-									$ar["id"],
-									g_name(ht($ar["name"])),
-									ht($ar["term"]));
-	}
-
-	return $ret;
-}
 
 
+$day = (isset($_POST["day"]) ? $_POST["day"] : date("Ym")."01");
 
 
 
@@ -127,7 +90,7 @@ $pr = make_pr($db);
 $db->close();
 
 
-$dd = get_date();
+$dd = get_date($day);
 $hash = date("YmdHis");
 
 ?>
@@ -167,3 +130,4 @@ $hash = date("YmdHis");
 <br>
 <input type="button" value="Å@ìoò^Å@" onclick="submit()">
 </form>
+
