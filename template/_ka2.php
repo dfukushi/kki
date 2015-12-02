@@ -2,24 +2,20 @@
 
 
 
-function get_date($day){
+function get_date(){
 
 	$ret = "<select name=\"day\">\n";
 
 	for($i = 2; $i >= 0; $i--){
 		$mn1 = date("Y/m", strtotime("-${i} month"));
 		$mn2 = date("Ym", strtotime("-${i} month"))."01";
-		$chk = ($mn2 == $day) ? " selected" : "";
-
-		$ret .= "<option value=\"".$mn2."\"".$chk.">".ht($mn1)."</option>\n";
+		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
 	}
 
 	for($i = 1; $i < 2; $i++){
 		$mn1 = date("Y/m", strtotime("+${i} month"));
 		$mn2 = date("Ym", strtotime("+${i} month"))."01";
-		$chk = ($mn2 == $day) ? " selected" : "";
-
-		$ret .= "<option value=\"".$mn2."\"".$chk.">".ht($mn1)."</option>\n";
+		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
 	}
 
 
@@ -29,7 +25,7 @@ function get_date($day){
 
 }
 
-function get_category($db, $cat){
+function get_category($db){
 
 	global $text_titles;
 
@@ -49,9 +45,8 @@ function get_category($db, $cat){
 		var_dump($v);
 		print "---";
 		*/
-		$chk = ($cat == $v["seq"]) ? " selected" : "";
 
-		$ret .= "<option value=\"".$v["seq"]."\"".$chk.">".ht($v["title"])."</option>\n";
+		$ret .= "<option value=\"".$v["seq"]."\">".ht($v["title"])."</option>\n";
 
 
 		/*
@@ -73,16 +68,13 @@ function get_category($db, $cat){
 
 
 
-$day = (isset($_POST["day"]) ? $_POST["day"] : date("Ym")."01");
-$cat = (isset($_POST["category"]) ? $_POST["category"] : "");
 
 
 
 $db = new DBLib($sg);
 $db->connect();
 
-
-$cat = get_category($db, $cat);
+$cat = get_category($db);
 /*
 $sch = make_schedule($db);
 $news = make_news($db);
@@ -93,11 +85,13 @@ $pr = make_pr($db);
 $db->close();
 
 
-$dd = get_date($day);
+$dd = get_date();
 $hash = date("YmdHis");
 
 ?>
 <br>
+ŒÅ’èŠz
+
 <form action="regist.php" method="post">
 <table class="simple">
 	<tr>
