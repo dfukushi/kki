@@ -1,28 +1,14 @@
 <?php
 
+function get_value($arr, $key){
 
+	foreach($arr as $ar){
 
-function get_date(){
-
-	$ret = "<select name=\"day\">\n";
-
-	for($i = 2; $i >= 0; $i--){
-		$mn1 = date("Y/m", strtotime("-${i} month"));
-		$mn2 = date("Ym", strtotime("-${i} month"))."01";
-		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
+		if($ar["category"] == $key){
+			return $ar["money"];
+		}
 	}
-
-	for($i = 1; $i < 2; $i++){
-		$mn1 = date("Y/m", strtotime("+${i} month"));
-		$mn2 = date("Ym", strtotime("+${i} month"))."01";
-		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
-	}
-
-
-	$ret .= "</select>\n";
-	return $ret;
-
-
+	return 0;
 }
 
 function get_category($db){
@@ -31,37 +17,27 @@ function get_category($db){
 
 	$mn1 = date("Ym");
 
-	$sql1 = "select seq, title from kk_category where type <> 2 order by sort_num";
+	$sql1 = "select seq, title from kk_category where type = 2 order by sort_num";
 	$db->prepare($sql1);
 	//$db->bind($mn1);
 	$val = $db->execute();
 
-	$ret = "<select name=\"category\">\n";
+	$ret = "<table class=\"simple\">\n";
+
+
+
+	$sql2 = "select category,money from kk_history where category in (select seq from kk_category where type = 2)";
+	$db->prepare($sql2);
+	$arr2 = $db->execute();
 
 	foreach($val as $v){
 
-		/*
-		print "---";
-		var_dump($v);
-		print "---";
-		*/
+		$mn = get_value($arr2, $v["seq"]);
+		$ret .= "<tr><td>".ht($v["title"])."</td><td><input type=\"text\" name=\"cat_".$v["seq"]."\" value=\"".$mn."\"></td></tr>\n";
 
-		$ret .= "<option value=\"".$v["seq"]."\">".ht($v["title"])."</option>\n";
-
-
-		/*
-		$v = trim($v);
-
-		if($v == ""){
-			continue;
-		}
-		$ret .= "<li><span>".ht($v)."</span></li>\n";
-		$cnt++;
-		*/
 	}
 
-	$ret .= "</select>";
-	//$ret .= "<li><span>‘¼A".ht($text_titles["bhour_regular"])."\n";
+	$ret .= "</table>";
 
 	return $ret;
 }
@@ -84,46 +60,15 @@ $pr = make_pr($db);
 
 $db->close();
 
-
-$dd = get_date();
-$hash = date("YmdHis");
-
 ?>
 <br>
 ŒÅ’èŠz
 
-<form action="regist.php" method="post">
-<table class="simple">
-	<tr>
-	<td>‘ÎÛŒ</td>
-	<td>
-	<?php print $dd; ?>
-	</td>
-	</tr>
+<form action="regist2.php" method="post">
 
-	<tr>
-	<td>ƒJƒeƒSƒŠ[</td>
-	<td>
-		<?php print $cat; ?>
-	</td>
-	</tr>
 
-	<tr>
-	<td>“ü—ÍÒ</td>
-	<td>
-	<select name="user">
-		<option value="1">”ü‚³‚ñ</option>
-		<option value="2">‘å•ã‚³‚ñ</option>
-	<select>
-	</td>
-	</tr>
+<?php print $cat; ?>
 
-	<tr>
-	<td>‹àŠz</td>
-	<td><textarea rows=8 cols=40 name="money"></textarea></td>
-	</tr>
-</table>
-<input type="hidden" name="hash" value="<?php print $hash; ?>">
 <br>
 <input type="button" value="@“o˜^@" onclick="submit()">
 </form>

@@ -75,6 +75,8 @@ function get_category($db, $cat){
 
 $day = (isset($_POST["day"]) ? $_POST["day"] : date("Ym")."01");
 $cat = (isset($_POST["category"]) ? $_POST["category"] : "");
+$user = (isset($_POST["user"]) ? $_POST["user"] : "0");
+
 
 
 
@@ -118,9 +120,9 @@ $hash = date("YmdHis");
 	<td>“ü—ÍÒ</td>
 	<td>
 	<select name="user">
-		<option value="1">”ü‚³‚ñ</option>
-		<option value="2">‘å•ã‚³‚ñ</option>
-	<select>
+		<option value="1"<?php print ($user == 1 ? " selected" : ""); ?>>”ü‚³‚ñ</option>
+		<option value="2"<?php print ($user == 2 ? " selected" : ""); ?>>‘å•ã‚³‚ñ</option>
+	</select>
 	</td>
 	</tr>
 

@@ -72,13 +72,63 @@ function get_category($db){
 	return $ret;
 }
 
+function get_user_name($user){
 
-function get_list($db, $day){
+	if($user == 1){
+		return "美香さん";
+	}else if($user == 2){
+		return "大輔さん";
+	}
+	return "-";
+}
 
-	$sql1 = "select kh.seq seq,kh.money money,kc.title title,kh.create_date create_date from kk_history kh
+
+
+function get_list_user($db, $day, $user){
+
+
+	$sql1 = "select sum(money) sum, kc.title title from kk_history kh
 inner join kk_category kc
 on kh.category = kc.seq
-where target_date >= ? and target_date < ?
+where (target_date >= ? and target_date < ?) and user = ?
+group by kh.category
+order by kc.sort_num";
+
+	$db->prepare($sql1);
+	$db->bind(date("Y-m-d", strtotime($day)));
+	$db->bind(date("Y-m-d", strtotime($day." +1 month")));
+	$db->bind($user);
+	$cat_arr = $db->execute();
+
+	$ret = "";
+
+	$ret.= get_user_name($user)."<br>\n";
+
+
+	$ret .= "<table class=\"simple\">\n";
+	foreach($cat_arr as $ar){
+
+		$ret .= "<tr>";
+		$ret .= "<td style=\"text-align:right\">".number_format($ar["sum"])."</td>\n";
+		$ret .= "<td>".htmlspecialchars($ar["title"])."</td>\n";
+		$ret .= "</tr>\n";
+
+	}
+	$ret .= "</table><br>\n";
+
+	return $ret;
+
+
+}
+
+function get_list($db, $day, $u_html){
+
+
+	// 一覧取得
+	$sql1 = "select kh.seq seq,kh.money money,kc.title title,kh.create_date create_date,kc.type type,user from kk_history kh
+inner join kk_category kc
+on kh.category = kc.seq
+where (target_date >= ? and target_date < ?) or (target_date < '2000/01/01')
 order by kc.sort_num";
 
 	$db->prepare($sql1);
@@ -88,10 +138,11 @@ order by kc.sort_num";
 
 
 
+	// カテゴリーごとの合計取得
 	$sql1 = "select sum(money) sum, kc.title title from kk_history kh
 inner join kk_category kc
 on kh.category = kc.seq
-where target_date >= ? and target_date < ?
+where (target_date >= ? and target_date < ?) or (target_date < '2000/01/01')
 group by kh.category
 order by kc.sort_num";
 
@@ -107,7 +158,8 @@ order by kc.sort_num";
 		$total += $ar["money"];
 	}
 
-	$ret = "<br><br>トータル：<b style=\"color:red\">".number_format($total)."円</b><br><br>";
+	//$ret = "<br><br>トータル：<b style=\"color:red\">".number_format($total)."円</b><br><br>";
+	$ret = "<br><br>トータル：<b>".number_format($total)."円</b><br><br>";
 
 
 	$ret .= "<table class=\"simple\">\n";
@@ -119,7 +171,11 @@ order by kc.sort_num";
 		$ret .= "</tr>\n";
 
 	}
-	$ret .= "</table><br><br><br>\n";
+	$ret .= "</table><br>\n";
+
+	$ret .= $u_html;
+
+	$ret .= "<br>\n";
 
 
 	$ret .= "<table class=\"simple\">\n";
@@ -128,7 +184,14 @@ order by kc.sort_num";
 		$ret .= "<tr>";
 		$ret .= "<td style=\"text-align:right\">".number_format($ar["money"])."</td>\n";
 		$ret .= "<td>".htmlspecialchars($ar["title"])."</td>\n";
-		$ret .= "<td>".htmlspecialchars($ar["create_date"])."</td>\n";
+
+		if($ar["type"] == 2){
+			$ret .= "<td>固定費</td>\n";
+		}else{
+			$ret .= "<td>".htmlspecialchars($ar["create_date"])."</td>\n";
+		}
+
+		$ret .= "<td>".htmlspecialchars(get_user_name($ar["user"]))."</td>\n";
 
 		$ret .= "<td><input type=\"checkbox\" name=\"del_".$ar["seq"]."\"></td>\n";
 		$ret .= "</tr>\n";
@@ -146,12 +209,18 @@ $day = (isset($_POST["day"]) ? $_POST["day"] : date("Ym")."01");
 $db = new DBLib($sg);
 $db->connect();
 
-$lst = get_list($db, $day);
+$u1 = get_list_user($db, $day, 1);
+$u2 = get_list_user($db, $day, 2);
+
+$lst = get_list($db, $day, ($u1.$u2));
+
 /*
 $sch = make_schedule($db);
 $news = make_news($db);
 $pr = make_pr($db);
 */
+
+
 
 
 $db->close();
