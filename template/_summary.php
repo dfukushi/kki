@@ -110,7 +110,7 @@ order by kc.sort_num";
 
 		$ret .= "<tr>";
 		$ret .= "<td style=\"text-align:right\">".number_format($ar["sum"])."</td>\n";
-		$ret .= "<td>".htmlspecialchars($ar["title"])."</td>\n";
+		$ret .= "<td>".ht($ar["title"])."</td>\n";
 		$ret .= "</tr>\n";
 
 	}
@@ -167,7 +167,7 @@ order by kc.sort_num";
 
 		$ret .= "<tr>";
 		$ret .= "<td style=\"text-align:right\">".number_format($ar["sum"])."</td>\n";
-		$ret .= "<td>".htmlspecialchars($ar["title"])."</td>\n";
+		$ret .= "<td>".ht($ar["title"])."</td>\n";
 		$ret .= "</tr>\n";
 
 	}
@@ -183,15 +183,15 @@ order by kc.sort_num";
 
 		$ret .= "<tr>";
 		$ret .= "<td style=\"text-align:right\">".number_format($ar["money"])."</td>\n";
-		$ret .= "<td>".htmlspecialchars($ar["title"])."</td>\n";
+		$ret .= "<td>".ht($ar["title"])."</td>\n";
 
 		if($ar["type"] == 2){
 			$ret .= "<td>ŒÅ’è”ï</td>\n";
 		}else{
-			$ret .= "<td>".htmlspecialchars($ar["create_date"])."</td>\n";
+			$ret .= "<td>".ht($ar["create_date"])."</td>\n";
 		}
 
-		$ret .= "<td>".htmlspecialchars(get_user_name($ar["user"]))."</td>\n";
+		$ret .= "<td>".ht(get_user_name($ar["user"]))."</td>\n";
 
 		$ret .= "<td><input type=\"checkbox\" name=\"del_".$ar["seq"]."\"></td>\n";
 		$ret .= "</tr>\n";

@@ -4,10 +4,10 @@
 function design_write(){
 	global $design;
 	global $sg;
-	
+
 	// バックアップ
 	copy($sg["TEMPLATE_PATH"]."/conf/design.ini", $sg["TEMPLATE_PATH"]."/conf/design.ini.".date("YmdHis").".bk");
-	
+
 	$fp = fopen($sg["TEMPLATE_PATH"]."/conf/design.ini", "w");
 	foreach($design as $key => $val){
 		$v = sprintf("%s = \"%s\"\n", $key, str_replace("\"", "'", $val));
@@ -18,7 +18,7 @@ function design_write(){
 function ment_write(){
 	global $ment_ini;
 	global $sg;
-	
+
 	// バックアップ
 	copy($sg["TEMPLATE_PATH"]."/conf/ment.ini", $sg["TEMPLATE_PATH"]."/conf/ment.ini.".date("YmdHis").".bk");
 
@@ -40,17 +40,17 @@ function rnd_id($seed){
 	$v = encode($seed, rand(1,20));
 	return substr($v, 0, 16);
 }
-	
+
 
 function _make_id($type, $db){
 
-	
+
 	$sql = "select id_".$type." from id_list for update";
-	
+
 	$db->prepare($sql);
 	$id = $db->execute11();
 	$id += 1;  // 今回のID
-	
+
 	$sql = "update id_list set id_".$type." = ?";
 	$db->prepare($sql);
 	$db->bind($id);
@@ -60,9 +60,9 @@ function _make_id($type, $db){
 		$db->rollback();
 		die("IDの払い出しに失敗");
 	}
-	
+
 	$db->commit();
-	
+
 	$id = sprintf("%010d", $id);
 	$id = encode($id, $type);
 	return $id;
@@ -70,7 +70,7 @@ function _make_id($type, $db){
 function make_id($type, $db = null){
 
 	global $sg;
-	
+
 	if($db == null){  // DB渡って来ないと接続～解放までやってあげる
 		$db = new DBLib($sg);
 		$db->connect();
@@ -78,7 +78,7 @@ function make_id($type, $db = null){
 		$db->close();
 		return $id;
 	}
-	
+
 	return _make_id($type, $db);
 }
 
@@ -100,10 +100,13 @@ function deletedir($rootPath){
 function startsWith($haystack, $needle){
     return strpos($haystack, $needle, 0) === 0;
 }
-	
+
 function ht($str){
+	if(phpversion() == "5.3.29"){
+		return htmlspecialchars($str);
+	}
 	return htmlspecialchars($str, ENT_HTML401, "sjis");
-}		
+}
 function htbr($str){
 	$v = htmlspecialchars($str);
 	$v = str_replace("\r", "", $v);
@@ -142,10 +145,10 @@ function url_henkan($mojiretu){
 
 
 function paging($db, $sql, $max = 0){
-	
+
 	global $paging;
 	global $paging_max;
-	
+
 	if($max == 0){
 		$n = preg_replace("/\..*$/", "", basename($_SERVER["SCRIPT_NAME"]));
 		if(!isset($paging_max[$n])){
@@ -154,46 +157,46 @@ function paging($db, $sql, $max = 0){
 			$max = $paging_max[$n];
 		}
 	}
-	
+
 	$sq = str_replace("\r", " ", $sql);
 	$sq = str_replace("\n", " ", $sq);
-	
+
 	$sqlc = preg_replace("/select .* from /", "select count(1) from ", $sq);
-	
+
 	$db->prepare($sqlc);
 	$cnt = $db->execute11();
-	
+
 	$page_cnt = ceil($cnt / $max);
-	
+
 	if($page_cnt <= 1){
 		$paging = "<hr>\n";
 		return $sql;
 	}
-	
+
 	$ix = "1";
 	if(isset($_GET["ix"])){
 		$ix = $_GET["ix"];
 	}else if(isset($_POST["ix"])){
 		$ix = $_POST["ix"];
 	}
-	
+
 	if($ix < 1){
 		$ix = 1;
 	}
 	if($ix >= $page_cnt){
 		$ix = $page_cnt;
 	}
-	
-	
+
+
 
 
 	$s = ($max * ($ix-1));
-	
+
 	$temp = "template/loop/_paging.php";
 	ob_start();
 	include($temp);
 	$paging = ob_get_clean();
-	
+
 	return $sql.= " limit ".$s.",".$max;
 }
 
@@ -230,7 +233,7 @@ function imgsize($img, $width, $height){
 	if(!file_exists($img)){
 		return;
 	}
-	
+
 	$size = getimagesize($img);
 	if($size[0] > $width){
 		return " width=\"".$width."px\"";
