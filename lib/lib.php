@@ -102,7 +102,7 @@ function startsWith($haystack, $needle){
 }
 	
 function ht($str){
-	return htmlspecialchars($str);
+	return htmlspecialchars($str, ENT_HTML401, "sjis");
 }		
 function htbr($str){
 	$v = htmlspecialchars($str);
