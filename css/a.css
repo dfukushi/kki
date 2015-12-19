@@ -104,8 +104,8 @@ section{
 
 body{
 	min-width: 1200px;
-	/*font-family: 'ƒƒCƒŠƒI', Meiryo, '‚l‚r ‚oƒSƒVƒbƒN', 'ƒqƒ‰ƒMƒmŠpƒS Pro W3', 'Hiragino Kaku Gothic Pro', sans-serif;*/
-	font-family: Verdana,'ŸàƒSƒVƒbƒN',YuGothic,'ƒƒCƒŠƒI',Meiryo,'‚l‚r ‚oƒSƒVƒbƒN','ƒqƒ‰ƒMƒmŠpƒS Pro W3','Hiragino Kaku Gothic Pro',sans-serif;
+	/*font-family: 'ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½I', Meiryo, 'ï¿½lï¿½r ï¿½oï¿½Sï¿½Vï¿½bï¿½N', 'ï¿½qï¿½ï¿½ï¿½Mï¿½mï¿½pï¿½S Pro W3', 'Hiragino Kaku Gothic Pro', sans-serif;*/
+	font-family: Verdana,'ï¿½ï¿½ï¿½Sï¿½Vï¿½bï¿½N',YuGothic,'ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½I',Meiryo,'ï¿½lï¿½r ï¿½oï¿½Sï¿½Vï¿½bï¿½N','ï¿½qï¿½ï¿½ï¿½Mï¿½mï¿½pï¿½S Pro W3','Hiragino Kaku Gothic Pro',sans-serif;
 	font-size: 0.625em;
 	line-height: 1.5;
 	color: #333333;
@@ -113,27 +113,27 @@ body{
 
 p.title_c{
 	background: #424242;
-	color: #fff;	
-	
+	color: #fff;
+
 	font-size: 24pt;
 	white-space: nowrap;
 	display:inline;
 	text-align: center;
 	font-weight: bold;
-	
+
 }
 
 p.title_c2{
-	
-	color: #FF8000;	
-	
+
+	color: #FF8000;
+
 	font-size: 18pt;
 	white-space: nowrap;
 	display:inline;
 	text-align: center;
 	font-weight: bold;
 	vertical-align: 4px;
-	
+
 }
 
 
@@ -162,7 +162,7 @@ p.button2 a {
 	background: linear-gradient(top, #fff, #f0f0f0);      /* CSS3 */
 	/* line-height: 2em; */
 	vertical-align:bottom;
-	width: 160px;
+	width: 130px;
 	display: block;
 	font-weight: bold;
 	font-size: 12pt;
@@ -176,12 +176,12 @@ p.button2 a:link{
 p.button2 a:hover{
 	color:#ff0000;
 
-	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#F79F81)); /* Chrome,Safari */	
-	
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#F79F81)); /* Chrome,Safari */
+
 	background: -moz-linear-gradient(top, #fff, #F79F81);     /* IE10+ */
     background: -ms-linear-gradient(top, #fff, #F79F81);    /* IE8-9 */
-   				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#F79F81', GradientType=0)";    
-	
+   				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#F79F81', GradientType=0)";
+
 	background: -moz-linear-gradient(top, #fff, #F79F81); /* Firefox */
 	background: -o-linear-gradient(top, #fff, #F79F81);   /* Opera */
 	background: linear-gradient(top, #fff, #F79F81);      /* CSS3 */
@@ -288,10 +288,10 @@ pre.small29{
 
 pre.small9{
 	font-size: 9pt;
-}	
+}
 pre.small10{
 	font-size: 10pt;
-}	
+}
 p.error{
 	font-size: 12pt;
 	white-space: nowrap;
@@ -329,19 +329,19 @@ hr {
 }
 
 
-textarea {  
-    resize: none;  
-} 
+textarea {
+    resize: none;
+}
 
 table.simple{
-	border: solid 1px #000000; 
+	border: solid 1px #000000;
 	border-collapse: collapse;
 }
 table.simple td{
 	border: solid 1px #000000;
-	padding: 5px; 
+	padding: 5px;
 }
-	
+
 #news{
     border:solid 1px #ddd;
     padding: 5px;
@@ -401,7 +401,7 @@ table.simple td{
 }
 
 #ul1 li {
-	list-style: square outside; 
+	list-style: square outside;
 	color:#3cf;
 	list-style-image:none;
 	font-size: 12pt;
@@ -413,7 +413,7 @@ table.simple td{
 }
 
 #ul2 li {
-	list-style: square outside; 
+	list-style: square outside;
 	color:#faa;
 	list-style-image:none;
 	font-size: 11pt;
@@ -425,7 +425,7 @@ table.simple td{
 }
 
 #ul3 li {
-	list-style: square outside; 
+	list-style: square outside;
 	color:#faa;
 	list-style-image:none;
 	font-size: 12pt;
@@ -475,7 +475,7 @@ table.bhour tr td {
 }
 table.bhour tr td:last-child {
 	border-right: 1px solid #84b2e0;
-	
+
 }
 table.bhour tr {
 	background: #fff;
@@ -487,7 +487,7 @@ table.bhour tr:nth-child(2n+1) {
 	background: #f1f6fc;
 }
 table.bhour tr:last-child td {
-	
+
 }
 table.bhour tr.x {
 	background: #FFB6C1;
@@ -637,7 +637,7 @@ table.reserve th {
 }
 table.reserve th:first-child {
 	border-left:1px solid #aaa;
-	border-radius: 5px 0 0 0;	
+	border-radius: 5px 0 0 0;
 }
 table.reserve th:last-child {
 	border-radius:0 5px 0 0;
@@ -700,7 +700,7 @@ table.bnd th {
 }
 table.bnd th:first-child {
 	border-left:1px solid #aaa;
-	border-radius: 5px 0 0 0;	
+	border-radius: 5px 0 0 0;
 }
 table.bnd th:last-child {
 	border-radius:0 5px 0 0;
