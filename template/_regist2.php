@@ -1,29 +1,32 @@
 <?php
 
 
-
-function get_date2(){
-
-	$ret = "<select name=\"category\">\n";
-
-	for($i = 2; $i >= 0; $i--){
-		$mn1 = date("Y/m", strtotime("-${i} month"));
-		$mn2 = date("Ym", strtotime("-${i} month"))."01";
-		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
-	}
-
-	for($i = 1; $i < 2; $i++){
-		$mn1 = date("Y/m", strtotime("+${i} month"));
-		$mn2 = date("Ym", strtotime("+${i} month"))."01";
-		$ret .= "<option value=\"".$mn2."\">".ht($mn1)."</option>\n";
-	}
+function del_list($db){
 
 
-	$ret .= "</select>\n";
-	return $ret;
-
-
+	$sql1 = "delete from kk_history where category in (select seq from kk_category where type = 2)";
+	$db->prepare($sql1);
+	//$db->bind($mn1);
+	$db->execute_update();
 }
+
+
+
+
+function get_cat_list($db){
+
+	global $text_titles;
+
+	$mn1 = date("Ym");
+
+	$sql1 = "select seq, title from kk_category where type = 2 order by sort_num";
+	$db->prepare($sql1);
+	//$db->bind($mn1);
+	$val = $db->execute();
+
+	return $val;
+}
+
 
 function get_category2($db){
 
@@ -48,7 +51,6 @@ function get_category2($db){
 
 		$ret .= "<option value=\"".$v["seq"]."\">".ht($v["title"])."</option>\n";
 
-
 		/*
 		$v = trim($v);
 
@@ -67,19 +69,6 @@ function get_category2($db){
 }
 
 
-function is_hash($hash, $db){
-
-	$sql1 = "select 1 from kk_history where hash_key = ?";
-	$db->prepare($sql1);
-	$db->bind($hash);
-	$val = $db->execute();
-
-	return (count($val) > 0);
-
-}
-
-
-
 
 
 $db = new DBLib($sg);
@@ -94,33 +83,29 @@ $pr = make_pr($db);
 
 // ƒnƒbƒVƒ…‚ª“o˜^Ï‚İ‚©‚Ç‚¤‚©”»’è
 
-$hash = $_POST["hash"];
-$user = $_POST["user"];
-$cat = $_POST["category"];
-$money = $_POST["money"];
-$day = $_POST["day"];
-$mm = explode("\n", $money);
+$user = "99";
+$cat = ""; // ƒ‹[ƒv
+$money = "";  //ƒ‹[ƒv
+$day = "1999-01-01";
 $ip = $_SERVER["REMOTE_ADDR"]." (".gethostbyaddr($_SERVER["REMOTE_ADDR"]).")";
 
 $total = 0;
 
 
-$f = is_hash($hash, $db);
-if($f){
-	// “o˜^Ï‚İ
-	print "“o˜^Ï‚İ‚Å‚·";
-	goto end;
-}
+// ‚Ü‚¸‘S•”Á‚·
+del_list($db);
 
+
+$arr = get_cat_list($db);
 
 
 // ‹àŠz•ªƒ‹[ƒv‚·‚é (insert’@‚­)
-foreach($mm as $m){
-	$kin = trim($m);
-	if($kin == 0 || $kin == ""){
-		continue;
-	}
+foreach($arr as $ar){
 
+	$m = $_POST["cat_".$ar["seq"]];
+	$cat = $ar["seq"];
+
+	$kin = trim($m);
 	$total += $kin;
 
 	$sql1 = "insert into kk_history (target_date, money, category, type, ip, user, delete_flg, create_date, hash_key) values (?, ?, ?, '1', ?, ?, '0', now(), ?)";
@@ -131,7 +116,7 @@ foreach($mm as $m){
 	$db->bind($cat);
 	$db->bind($ip);
 	$db->bind($user);
-	$db->bind($hash);
+	$db->bind("");
 
 	$val = $db->execute_update();
 }
@@ -148,9 +133,5 @@ $regist_flg = "1";
 
 ?>
 <br>
-<?php print $total; ?>‰~•ª“o˜^‚µ‚Ü‚µ‚½I<br>
-<br>
-ˆø‚«‘±‚«“ü—Ío—ˆ‚Ü‚·<br>
-<br>
-<br>
-<?php require_once("_ka.php"); ?>
+ŒÅ’è”ï‚ğ“o˜^‚µ‚Ü‚µ‚½I<br>
+<?php require_once("_ka2.php"); ?>

@@ -100,7 +100,7 @@ $hash = date("YmdHis");
 
 ?>
 <br>
-<form action="regist.php" method="post">
+<form action="regist3.php" method="post">
 <table class="simple">
 	<tr>
 	<td>‘ÎÛŒ</td>
@@ -109,12 +109,6 @@ $hash = date("YmdHis");
 	</td>
 	</tr>
 
-	<tr>
-	<td>ƒJƒeƒSƒŠ[</td>
-	<td>
-		<?php print $cat; ?>
-	</td>
-	</tr>
 
 	<tr>
 	<td>“ü—ÍÒ</td>

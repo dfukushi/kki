@@ -69,7 +69,7 @@ function get_category2($db){
 
 function is_hash($hash, $db){
 
-	$sql1 = "select 1 from kk_history where hash_key = ?";
+	$sql1 = "select 1 from kk_pay where hash_key = ?";
 	$db->prepare($sql1);
 	$db->bind($hash);
 	$val = $db->execute();
@@ -96,7 +96,7 @@ $pr = make_pr($db);
 
 $hash = $_POST["hash"];
 $user = $_POST["user"];
-$cat = $_POST["category"];
+$cat = "0";
 $money = $_POST["money"];
 $day = $_POST["day"];
 $mm = explode("\n", $money);
@@ -117,18 +117,17 @@ if($f){
 // ‹àŠz•ªƒ‹[ƒv‚·‚é (insert’@‚­)
 foreach($mm as $m){
 	$kin = trim($m);
+	$total += $kin;
 	if($kin == 0 || $kin == ""){
 		continue;
 	}
 
-	$total += $kin;
-
-	$sql1 = "insert into kk_history (target_date, money, category, type, ip, user, delete_flg, create_date, hash_key) values (?, ?, ?, '1', ?, ?, '0', now(), ?)";
+	$sql1 = "insert into kk_pay (target_date, money, category, type, ip, user, delete_flg, create_date, hash_key) values (?, ?, ?, '1', ?, ?, '0', now(), ?)";
 
 	$db->prepare($sql1);
 	$db->bind($day);
 	$db->bind($kin);
-	$db->bind($cat);
+	$db->bind("0");
 	$db->bind($ip);
 	$db->bind($user);
 	$db->bind($hash);

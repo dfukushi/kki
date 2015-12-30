@@ -1,5 +1,5 @@
 <?php
-	
+
 	$alog = new Alog();
 
 	ob_start();
@@ -12,11 +12,11 @@
 	}
 
 	require_once($sg["TEMPLATE_PATH"]."/basic/_head.php");
-	
+
 ?>
 <table>
 	<tr>
-	<td valign="top" width="190px">
+	<td valign="top" width="200px">
 <?php
 	require_once($sg["TEMPLATE_PATH"]."/basic/_menu.php");
 ?>

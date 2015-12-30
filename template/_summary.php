@@ -84,6 +84,27 @@ function get_user_name($user){
 
 
 
+function get_pay_list($db, $day, $user){
+
+
+	$sql1 = "select sum(money) sum from kk_pay kh
+where (target_date >= ? and target_date < ?) and user = ?
+group by kh.category";
+
+	$db->prepare($sql1);
+	$db->bind(date("Y-m-d", strtotime($day)));
+	$db->bind(date("Y-m-d", strtotime($day." +1 month")));
+	$db->bind($user);
+	$arr = $db->execute();
+
+	if(count($arr) == 0){
+		return 0;
+	}
+
+	return $arr[0]["sum"];
+
+}
+
 function get_list_user($db, $day, $user){
 
 
@@ -105,6 +126,9 @@ order by kc.sort_num";
 	$ret.= get_user_name($user)."<br>\n";
 
 
+	$total = 0;
+
+	$ret .= "<table><tr><td>";
 	$ret .= "<table class=\"simple\">\n";
 	foreach($cat_arr as $ar){
 
@@ -112,9 +136,25 @@ order by kc.sort_num";
 		$ret .= "<td style=\"text-align:right\">".number_format($ar["sum"])."</td>\n";
 		$ret .= "<td>".ht($ar["title"])."</td>\n";
 		$ret .= "</tr>\n";
+		$total += $ar["sum"];
 
 	}
+
+
+	$ret .= "<td style=\"text-align:right\">".number_format($total)."</td>\n";
+	$ret .= "<td>トータル</td>\n";
+
 	$ret .= "</table><br>\n";
+	$ret .= "</td><td>";
+
+	// 支払い済み
+	$pay = get_pay_list($db, $day, $user);
+	$ret .= "　".number_format($pay)."円<br>";
+
+	$ret .= "　"."残り：".number_format($pay - $total)."円";
+
+	$ret .= "</td></tr></table>";
+
 
 	return $ret;
 
@@ -129,7 +169,7 @@ function get_list($db, $day, $u_html){
 inner join kk_category kc
 on kh.category = kc.seq
 where (target_date >= ? and target_date < ?) or (target_date < '2000/01/01')
-order by kc.sort_num";
+order by kc.sort_num,create_date asc";
 
 	$db->prepare($sql1);
 	$db->bind(date("Y-m-d", strtotime($day)));
@@ -169,6 +209,8 @@ order by kc.sort_num";
 		$ret .= "<td style=\"text-align:right\">".number_format($ar["sum"])."</td>\n";
 		$ret .= "<td>".ht($ar["title"])."</td>\n";
 		$ret .= "</tr>\n";
+
+		$total += $ar["sum"];
 
 	}
 	$ret .= "</table><br>\n";
